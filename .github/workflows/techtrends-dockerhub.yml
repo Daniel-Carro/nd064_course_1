@@ -33,3 +33,4 @@ jobs:
           file: ./project/techtrends/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/techtrends:latest
+          
