@@ -2,37 +2,34 @@ name: TechTrends - Package with Docker
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # evita warnings de Node.js 20
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # evita warnings de Node.js 20
 
     steps:
-      # 1️⃣ Clona tu repositorio
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Instala Python 3.8
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
-      # 3️⃣ Log in a DockerHub usando los secretos
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 4️⃣ Construye y sube la imagen Docker
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./project/techtrends         # ruta donde está tu Dockerfile
+          context: ./project/techtrends   # ruta donde está tu Dockerfile
           file: ./project/techtrends/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/techtrends:latest
