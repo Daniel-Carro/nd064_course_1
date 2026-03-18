@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+    - port: 443
+      targetPort: 443
+      nodePort: 30008   # puerto externo que usarás en el navegador
+  selector:
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
