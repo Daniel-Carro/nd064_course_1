@@ -22,7 +22,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./project
-          file: ./project/Dockerfile
+          context: ./project/techtrends
+          file: ./project/techtrends/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/techtrends:latest
