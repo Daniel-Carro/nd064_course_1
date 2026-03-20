@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'file:///home/vagrant/bin/project/helm/techtrends'
+    repoURL: 'https://github.com/Daniel-Carro/nd064_course_1.git'
     targetRevision: HEAD
     path: .
     helm:

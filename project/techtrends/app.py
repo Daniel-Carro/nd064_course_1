@@ -2,22 +2,39 @@ import sqlite3
 
 #DCR
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
-from werkzeug.exceptions import abort
 import logging
 from datetime import datetime
 from flask import jsonify
+import sys
 
 db_connection_count = 0
 
 # Configurar logging
-logging.basicConfig(
-    level=logging.DEBUG,   # Captura DEBUG y superior
-    format='%(levelname)s:%(name)s:%(asctime)s, %(message)s',
-)
 logger = logging.getLogger("app")
+logger.setLevel(logging.DEBUG)
+
+# Desactivar que el logger propague al root (evita duplicados/confusión de niveles)
+logger.propagate = False
 
 
 
+# Handler para STDOUT (INFO y DEBUG)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+stdout_handler.addFilter(lambda record: record.levelno < logging.ERROR)  # Solo INFO y WARNING van aquí
+
+# Handler para STDERR (ERROR y CRÍTICOS)
+stderr_handler = logging.StreamHandler(sys.stderr)
+stderr_handler.setLevel(logging.ERROR)
+
+# Formato común
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(asctime)s, %(message)s')
+stdout_handler.setFormatter(formatter)
+stderr_handler.setFormatter(formatter)
+
+# Agregar handlers al logger
+logger.addHandler(stdout_handler)
+logger.addHandler(stderr_handler)
 
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
@@ -67,7 +84,7 @@ def metrics():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-        logger.info(f'Non-existing article accessed: ID {post_id}')
+        logger.error(f'Non-existing article accessed: ID {post_id}')
         return render_template('404.html'), 404
     else:
         logger.info(f'Article "{post["Title"]}" retrieved!')
