@@ -1,8 +1,8 @@
 namespace: sandbox
 
 image:
-  repository: techtrends
-  tag: latest
+  repository: danielcrpm/techtrends
+  tag: latest4
   pullPolicy: IfNotPresent
 
 replicaCount: 1
